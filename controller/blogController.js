@@ -7,11 +7,11 @@ let dateAndTime = moment().format('LLLL');
 const createBlog = async function(req, res) {
     try {
         let data = req.body
-        if(data.isPublished== true){
+        if (data.isPublished == true) {
             data.publishedAt = dateAndTime
         }
-        if(data.isDeleted==true){
-            return res.status(400).send({status:false,message:"cannot delete before creation"})
+        if (data.isDeleted == true) {
+            return res.status(400).send({ status: false, message: "cannot delete before creation" })
         }
         let blog = await blogModel.create(data)
         return res.status(201).send({ "status": true, "data": blog })
@@ -49,30 +49,30 @@ const updateBlogs = async function(req, res) {
     try {
 
         let data = req.body;
-        if(Object.keys(data).length<1){
-            return res.status(400).send({status:false,message:"cannot update without data"})
+        if (Object.keys(data).length < 1) {
+            return res.status(400).send({ status: false, message: "cannot update without data" })
         }
-        console.log(data)
-    
-        let { title, body, tags, subcategory, isPublished, publishedAt,isDeleted } = data
+        // console.log(data)
+
+        let { title, body, tags, subcategory, isPublished, publishedAt, isDeleted } = data
         let blogId = req.params.blogId
-        if(isDeleted==true){
-            return res.status(400).send({status:false,message:"cannot delete while updating"})
+        if (isDeleted == true) {
+            return res.status(400).send({ status: false, message: "cannot delete while updating" })
         }
         if (isPublished == true) {
             publishedAt = dateAndTime
         } else if (isPublished == false) {
             publishedAt = null
         }
-      
-        
+
+
         let updateBlogs = await blogModel.findByIdAndUpdate(
             blogId, {
                 $set: {
                     title: title,
                     body: body,
-                    isPublished: isPublished,//always  true when anyone update the blogs
-                    publishedAt: publishedAt//current date
+                    isPublished: isPublished, //always  true when anyone update the blogs
+                    publishedAt: publishedAt //current date
                 },
                 $addToSet: {
                     tags: tags,
@@ -82,9 +82,8 @@ const updateBlogs = async function(req, res) {
             }, { new: true }
         )
         if (updateBlogs == null) {
-                    return res.status(404).send({ status: false, message: "blog not found" })
-                }
-        else if (updateBlogs.isDeleted == false) {
+            return res.status(404).send({ status: false, message: "blog not found" })
+        } else if (updateBlogs.isDeleted == false) {
             return res.status(200).send({ status: true, message: "Blog updated successfully", data: updateBlogs })
         } else if (updateBlogs.isDeleted == true) {
             return res.status(404).send({ status: false, message: "blog is not present" })
@@ -100,15 +99,14 @@ const updateBlogs = async function(req, res) {
 
 //------------------------------------deleteting the blog---------------------//
 
-const deleteBlog = async function (req, res) {
+const deleteBlog = async function(req, res) {
     try {
 
         let blogId = req.params.blogId
         let blog = await blogModel.findOneAndUpdate({ _id: blogId, isDeleted: false }, { $set: { isDeleted: true, deletedAt: dateAndTime } }, { new: true })
         if (blog == null) {
             return res.status(404).send({ status: false, message: "blog not found" })
-        }
-        else {
+        } else {
             return res.status(200).send()
         }
 
@@ -117,7 +115,7 @@ const deleteBlog = async function (req, res) {
     }
 }
 
-const deleteBlogsByQuery = async function (req, res) {
+const deleteBlogsByQuery = async function(req, res) {
     try {
         let data = req.query
 
@@ -125,19 +123,17 @@ const deleteBlogsByQuery = async function (req, res) {
 
         let { category, authorId, tags, subcategory, isPublished } = data
 
-        let deletedBlog = await blogModel.updateMany(
-            {
+        let deletedBlog = await blogModel.updateMany({
                 $and: [
-                    { isDeleted: false }, { authorId: id }, data
+                    { isDeleted: false }, { authorId: id },
+                    data
                 ]
-            },
-            { $set: { isDeleted: true, deletedAt: dateAndTime } }
+            }, { $set: { isDeleted: true, deletedAt: dateAndTime } }
 
         )
         if (deletedBlog.modifiedCount > 0) {
             return res.status(200).send({ status: true, message: `${deletedBlog.modifiedCount} blog deleted` })
-        }
-        else return res.status(404).send({ status: false, message: "no blogs found" })
+        } else return res.status(404).send({ status: false, message: "no blogs found" })
 
 
     } catch (error) {
