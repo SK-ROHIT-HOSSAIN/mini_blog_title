@@ -7,13 +7,13 @@ const authorSchema = new mongoose.Schema({ //creting a Schema for author model
     // minLength:[2,"fname must contain atleast two letters"], 
     // maxLength:[60,"maximum length for fname exceeded"],
     trim: true,
-    validate: {
-      validator: function (value) {
-        const nameRegex = /^[A-Za-z\s]+$/;
-        return nameRegex.test(value);
-      },
-      message: 'Name should only contain only alphabets.'
-    }
+    // validate: {
+    //   validator: function (value) {
+    //     const nameRegex = /^[A-Za-z\s]+$/;
+    //     return nameRegex.test(value);
+    //   },
+    //   message: 'Name should only contain only alphabets.'
+    // }
   },
 
   lname: {
@@ -22,13 +22,13 @@ const authorSchema = new mongoose.Schema({ //creting a Schema for author model
     trim: true,
     // minLength:[2,"lname must contain atleast two letters"], 
     // maxLength:[60,"maximum length for lname exceeded"],
-    validate: {
-      validator: function (value) {
-        const nameRegex = /^[A-Za-z\s]+$/;
-        return nameRegex.test(value);
-      },
-      message: 'Name should only contain only alphabets'
-    }
+    // validate: {
+    //   validator: function (value) {
+    //     const nameRegex = /^[A-Za-z\s]+$/;
+    //     return nameRegex.test(value);
+    //   },
+    //   message: 'Name should only contain only alphabets'
+    // }
   },
 
   title: {
@@ -60,12 +60,12 @@ const authorSchema = new mongoose.Schema({ //creting a Schema for author model
     // minLength: [4,"password should be at least 4 characters"],
     required: [true, "Password is necessary"],
     trim: true,
-    validate: {
-      validator: function (value) {
-        return !/\s/.test(value);   // this regex for no space in password 
-      },
-      message: 'Password should not contain any spaces.'
-    }
+    // validate: {
+    //   validator: function (value) {
+    //     return !/\s/.test(value);   // this regex for no space in password 
+    //   },
+    //   message: 'Password should not contain any spaces.'
+    // }
   }
 
 }, { timestamps: true })

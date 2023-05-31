@@ -5,7 +5,8 @@
   "description": "In this project we are going to create a mini bloggin site.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/index.js"
   },
   "repository":{
     "type":"git",
