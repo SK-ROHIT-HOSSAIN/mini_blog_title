@@ -1,9 +1,9 @@
 const authorModel = require("../model/authorModel")
 const blogModel = require("../model/blogModel")
 const moment = require("moment")
-let dateAndTime = moment().format('LLLL');
+let dateAndTime = moment().format('LLLL');  //time formating
 
-//----------------------------------creating blog---------------------------------------------------------//
+//----------------------------------creating blog-----------------------------------------------------//
 const createBlog = async function(req, res) {
     try {
         let data = req.body
