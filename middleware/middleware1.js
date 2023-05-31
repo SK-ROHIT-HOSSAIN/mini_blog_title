@@ -26,9 +26,13 @@ const verifyId = async function (req, res, next) {
     try {
         let authorId = req.query.authorId
         let blogId = req.params.blogId
-        let id=blogId || authorId
+        let id=blogId 
+        id1=authorId
         
         if (id && !ObjectId.isValid(id)) {
+            return res.status(400).send({status:false,message:"Please enter a valid id"})
+        }
+        if (id1 && !ObjectId.isValid(id1)) {
             return res.status(404).send({status:false,message:"Please enter a valid id"})
         }
         next()
