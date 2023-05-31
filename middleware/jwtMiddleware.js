@@ -15,12 +15,9 @@ const verifyEmailPass = async function (req, res, next) {
             return res.status(400).send({ status: false, message: "email is invalid" })
         }
 
-
-
-
         let author = await authorModel.findOne({ email: email, password: password })
         if (!author) {
-            return res.status(400).send({ status: false, message: "email or password is incorrect" })
+            return res.status(401).send({ status: false, message: "email or password is incorrect" })
         }
         let authorId = author._id
         req.authorId = authorId
@@ -37,11 +34,11 @@ const verifytoken = async function (req, res, next) {
     try {
         let token = req.header("x-api-key")
         if (!token) {
-            return res.status(401).send({ status: false, message: "required token is missing (first login)" })
+            return res.status(403).send({ status: false, message: "required token is missing (first login)" })
         }
         let decoded = jwt.verify(token, "Prahlad_Rohit_Sofiyan_Saurabh_Secret_Key")
         if (!decoded) {
-            return res.status(401).send({ status: false, message: "invalid token" })
+            return res.status(403).send({ status: false, message: "invalid token" })
         }
         req.authorId = decoded.authorId
         next()
@@ -50,7 +47,7 @@ const verifytoken = async function (req, res, next) {
         if (err.message.includes("signature") || err.message.includes("token") || err.message.includes("malformed")) {
 
             // console.log(err.message)
-            return res.status(401).send({ status: false, message: "You are not Authenticated" })
+            return res.status(403).send({ status: false, message: "You are not Authenticated" })
         }
         return res.status(500).send({ status: false, message: err.message })
     }
@@ -68,13 +65,13 @@ const authorizedAuthor = async function (req, res, next) {
             }
             let authorId = blog.authorId
             if (id != authorId) {
-                return res.status(403).send({ status: false, message: "You are not authorized" })
+                return res.status(401).send({ status: false, message: "You are not authorized" })
             }
         }
         let authorId = req.query.authorId
         if (authorId) {
             if (id != authorId) {
-                return res.status(403).send({ status: false, message: "You are not authorized" })
+                return res.status(401).send({ status: false, message: "You are not authorized" })
             }
         }
         next()
